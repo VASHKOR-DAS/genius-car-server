@@ -1,0 +1,12 @@
+npm init -y
+npm i express cors mongodb
+git init
+------------------
+file hide krr jnno
+------------------
+
+npm i dotenv
+
+
+add 1 script on package.json
+"start": "node index.js",
