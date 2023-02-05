@@ -10,3 +10,28 @@ npm i dotenv
 
 add 1 script on package.json
 "start": "node index.js",
+
+
+
+
+--------------------------
+DB connect
+-------------------------
+
+Go to https://cloud.mongodb.com/
+click connect > 
+Connect your application > 
+check  Include full driver code example >
+copy the code
+
+got to Database Access (for create new user)
+
+ADD NEW DATABASE USER
+create a new user and save it on .env file
+follow on
+https://www.npmjs.com/package/dotenv
+
+require('dotenv').config() on top
+copy user name & password and paste it .env 
+
+add .gitIgnore file on .env
