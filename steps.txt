@@ -35,3 +35,20 @@ require('dotenv').config() on top
 copy user name & password and paste it .env 
 
 add .gitIgnore file on .env
+
+-------------------------
+create a db manually for insert fake data
+-------------------------
+Go to Database > Collections > Create Database
+Database name : geniusCar
+Collection name : services
+
+1ta error dibe karon amra db te dependency set kori ni
+tai go to MongoDB > Database Access >
+geniusDBUser 	SCRAM  All Resources EDIT  DELETE
+go to edit > Built-in Role > Read and write to any database
+click update user
+
+------------------------
+dynamic route db theke id anujayi access korte hole
+const query = { _id: new ObjectId(id) }; new keyword bosate hoy
