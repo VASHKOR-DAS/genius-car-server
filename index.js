@@ -51,6 +51,32 @@ async function run() {
             const result = await orderCollection.insertOne(order);
             res.send(result);
         })
+
+        // client site a user ki ki order korse(user email er oper base kore) seta sei user dekhte chaile
+        app.get('/orders', async (req, res) => {
+            let query = {};
+
+
+            /** 
+            const query = {}; // query k re-assign korte hbe
+            // http://localhost:5000/orders?email=web@ph.com link a ja khujbo ta nicher console a show hbe
+            console.log(req.query);
+            */
+
+            // client site a click kora email er sathe jodi req.query.email ai email ta mile tahole ai email ta 1ta email object er moddhe rakho
+            // http://localhost:5000/orders?email=elon@mask.com link a jei email diye query krbo sei email diye jei jei order kora hoise seigulo show hbe
+            // Amra chaile req.query.email k 1ta variable a rakhte partam
+            if (req.query.email) {
+                query = {
+                    email: req.query.email
+                }
+            }
+
+            const cursor = orderCollection.find(query);
+            const orders = await cursor.toArray();
+            res.send(orders);
+        })
+
     }
     finally {
 
