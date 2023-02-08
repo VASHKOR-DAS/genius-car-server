@@ -30,6 +30,26 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@clu
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
+// for jwt
+function verifyJWT(req, res, next) {
+    // console.log(req.headers.authorization);
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        res.status(401).send({ message: 'unauthorized access' })
+    }
+    const token = authHeader.split(' ')[1];
+    // console.log(token);
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decoded) {
+        if (err) {
+            res.status(401).send({ message: 'unauthorized access' })
+        }
+        req.decoded = decoded;
+        next();
+    })
+
+}
+
+
 async function run() {
     try {
 
@@ -41,7 +61,7 @@ async function run() {
             const user = req.body;
             // console.log(user);
             const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
-            res.send({token}); // for token in a json formate
+            res.send({ token }); // for token in a json formate
         })
 
         // db to get all data
@@ -68,7 +88,12 @@ async function run() {
         })
 
         // client site a user ki ki order korse(user email er oper base kore) seta sei user dekhte chaile
-        app.get('/orders', async (req, res) => {
+        app.get('/orders', verifyJWT, async (req, res) => {
+            // for jwt
+            // console.log(req.headers.authorization);
+
+
+
             let query = {};
 
 
