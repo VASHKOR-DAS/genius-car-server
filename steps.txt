@@ -52,3 +52,21 @@ click update user
 ------------------------
 dynamic route db theke id anujayi access korte hole
 const query = { _id: new ObjectId(id) }; new keyword bosate hoy
+
+
+------------------------------------------------------------
+JWT = Jot json web token
+npm install jsonwebtoken
+
+if (jwt token is storage on local storage) {
+    attack on xss(cross site scripting)
+    }
+else if (storage on HTTP Only Cookie) {
+    is better squire
+}
+
+create a manually token on by command
+// node
+// require('crypto).randomBytes(64).toString('hex)
+
+and paste on it .env file by name ACCESS_TOKEN_SECRET
