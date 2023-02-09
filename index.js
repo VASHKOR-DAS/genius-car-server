@@ -57,7 +57,7 @@ async function run() {
         app.post('/jwt', (req, res) => {
             const user = req.body;
             // console.log(user)
-            const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10' })
+            const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
             res.send({ token }) // for token have to convert in json
             // console.log({token})
         })
@@ -79,7 +79,7 @@ async function run() {
         });
 
         // orders api, client site theke order korle seta db te orders route a, db er orders collection a save (insert) hye jabe
-        app.post('/orders', async (req, res) => {
+        app.post('/orders', verifyJWT, async (req, res) => {
             const order = req.body; //client site theke data pathale seta body er majhe thake
             const result = await orderCollection.insertOne(order);
             res.send(result);
@@ -121,7 +121,7 @@ async function run() {
         })
 
         // update a specific property
-        app.patch('/orders/:id', async (req, res) => {
+        app.patch('/orders/:id', verifyJWT, async (req, res) => {
             const id = req.params.id;
             const status = req.body.status;
             const query = { _id: new ObjectId(id) }
@@ -136,7 +136,7 @@ async function run() {
 
 
         // delete a service
-        app.delete('/orders/:id', async (req, res) => {
+        app.delete('/orders/:id', verifyJWT, async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const result = await orderCollection.deleteOne(query);
