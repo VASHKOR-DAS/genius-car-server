@@ -32,21 +32,18 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 // for jwt
 function verifyJWT(req, res, next) {
-    // console.log(req.headers.authorization);
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-        res.status(401).send({ message: 'unauthorized access' })
+        return res.status(401).send({ message: 'unauthorized access' });
     }
     const token = authHeader.split(' ')[1];
-    // console.log(token);
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decoded) {
         if (err) {
-            res.status(401).send({ message: 'unauthorized access' })
+            return res.status(401).send({ message: 'forbidden access' });
         }
         req.decoded = decoded;
         next();
     })
-
 }
 
 
@@ -59,9 +56,10 @@ async function run() {
         // jwt (client site theke pathabo tai post)
         app.post('/jwt', (req, res) => {
             const user = req.body;
-            // console.log(user);
-            const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
-            res.send({ token }); // for token in a json formate
+            // console.log(user)
+            const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10' })
+            res.send({ token }) // for token have to convert in json
+            // console.log({token})
         })
 
         // db to get all data
@@ -89,8 +87,13 @@ async function run() {
 
         // client site a user ki ki order korse(user email er oper base kore) seta sei user dekhte chaile
         app.get('/orders', verifyJWT, async (req, res) => {
-            // for jwt
-            // console.log(req.headers.authorization);
+            const decoded = req.decoded;
+            console.log('inside orders api', decoded);
+
+            // email valid, token valid but data onno karo cheye thakleo no access
+            if (decoded.email !== req.query.email) {
+                res.status(403).send({ message: 'unauthorized access' })
+            }
 
 
 
